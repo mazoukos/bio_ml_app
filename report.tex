@@ -1,0 +1,182 @@
+\documentclass[a4paper,12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[greek,english]{babel}
+\usepackage{graphicx}
+\usepackage{geometry}
+\usepackage{hyperref}
+\usepackage{amsmath}
+\usepackage{listings}
+\usepackage{xcolor}
+
+\geometry{margin=2.5cm}
+
+% Ρυθμίσεις για κώδικα
+\lstset{
+  basicstyle=\ttfamily\footnotesize,
+  keywordstyle=\color{blue},
+  commentstyle=\color{green!60!black},
+  stringstyle=\color{red},
+  breaklines=true,
+  frame=single,
+  language=Python
+}
+
+\title{ 
+  \textbf{Διαδραστική Εφαρμογή Ανάλυσης Μοριακής Βιολογίας με Machine Learning} \\
+  \large Εαρινό Εξάμηνο 2024-2025
+}
+\author{
+  Μαρία Παπαδοπούλου, Γιώργος Νικολάου, Άννα Σταυροπούλου \\
+  Τμήμα Μοριακής Βιολογίας και Γενετικής \\
+  Πανεπιστήμιο ...
+}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\selectlanguage{greek}
+
+\begin{abstract}
+Στην παρούσα εργασία παρουσιάζεται η ανάπτυξη μιας διαδραστικής εφαρμογής ανάλυσης δεδομένων μοριακής βιολογίας με τη χρήση μεθόδων μηχανικής μάθησης, υλοποιημένη με το framework Streamlit. Η εφαρμογή επιτρέπει στο χρήστη να φορτώνει δεδομένα, να εκτελεί προεπεξεργασία, να εκπαιδεύει και να αξιολογεί μοντέλα, καθώς και να βλέπει οπτικοποιήσεις των αποτελεσμάτων. Επιπλέον, η εφαρμογή είναι dockerized, επιτυγχάνοντας φορητότητα και εύκολη εκτέλεση σε διάφορα περιβάλλοντα. Στην εργασία παρουσιάζονται η σχεδίαση, η υλοποίηση, οι οπτικοποιήσεις και η διαδικασία dockerization.
+\end{abstract}
+
+\section{Εισαγωγή}
+Η ανάλυση δεδομένων μοριακής βιολογίας αποτελεί ένα κρίσιμο πεδίο έρευνας, όπου οι μέθοδοι μηχανικής μάθησης προσφέρουν ισχυρά εργαλεία για την εξαγωγή γνώσης και την πρόβλεψη χαρακτηριστικών από βιολογικά δεδομένα. Η παρούσα εργασία στοχεύει στην ανάπτυξη μιας φιλικής προς τον χρήστη εφαρμογής που συνδυάζει ανάλυση δεδομένων και μοντέλα μηχανικής μάθησης με διαδραστικό τρόπο, ώστε να υποστηρίξει ερευνητές και φοιτητές στον τομέα.
+
+\section{Σχεδιασμός της Υλοποίησης}
+
+\subsection{Αρχιτεκτονική της Εφαρμογής}
+Η εφαρμογή βασίζεται στην Python και το Streamlit για τη δημιουργία του frontend και του backend σε ένα ενιαίο περιβάλλον. Η δομή της περιλαμβάνει τρία βασικά tabs: ανάλυση, οπτικοποιήσεις και πληροφορίες ομάδας. Ο χρήστης μπορεί να φορτώσει δεδομένα ή να χρησιμοποιήσει ένα ενσωματωμένο παράδειγμα, να επιλέξει αλγόριθμο μηχανικής μάθησης και να ρυθμίσει παραμέτρους.
+
+\subsection{Λειτουργικότητα}
+Η εφαρμογή υλοποιεί τις εξής διεργασίες:
+
+\begin{itemize}
+    \item Φόρτωση δεδομένων από αρχείο CSV ή χρήση έτοιμου dataset (Breast Cancer).
+    \item Προεπεξεργασία δεδομένων με κανονικοποίηση.
+    \item Εκπαίδευση μοντέλου (Random Forest, SVM, KNN) με διαχωρισμό σε train/test.
+    \item Αξιολόγηση μοντέλου με classification report και confusion matrix.
+    \item Οπτικοποιήσεις με PCA και heatmap.
+\end{itemize}
+
+\section{UML Διαγράμματα}
+
+\subsection{Use Case Diagram}
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=0.8\textwidth]{use_case_diagram.png}
+  \caption{Use Case Diagram της εφαρμογής}
+\end{figure}
+
+\subsection{Class Diagram}
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=0.8\textwidth]{class_diagram.png}
+  \caption{Class Diagram της αρχιτεκτονικής}
+\end{figure}
+
+\section{Ανάλυση Υλοποίησης}
+
+Παρακάτω παρουσιάζονται αποσπάσματα του κώδικα και περιγραφή των σημαντικότερων μερών:
+
+\subsection{Φόρτωση και Προεπεξεργασία Δεδομένων}
+\begin{lstlisting}
+import pandas as pd
+from sklearn.preprocessing import StandardScaler
+
+df = pd.read_csv('data.csv')
+X = df.iloc[:, :-1]
+y = df.iloc[:, -1]
+
+scaler = StandardScaler()
+X_scaled = scaler.fit_transform(X)
+\end{lstlisting}
+
+\subsection{Εκπαίδευση Μοντέλου}
+\begin{lstlisting}
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.model_selection import train_test_split
+
+X_train, X_test, y_train, y_test = train_test_split(
+    X_scaled, y, test_size=0.2, random_state=42)
+
+clf = RandomForestClassifier(random_state=42)
+clf.fit(X_train, y_train)
+y_pred = clf.predict(X_test)
+\end{lstlisting}
+
+\subsection{Αξιολόγηση και Οπτικοποίηση}
+\begin{lstlisting}
+from sklearn.metrics import classification_report, confusion_matrix
+import matplotlib.pyplot as plt
+import seaborn as sns
+from sklearn.decomposition import PCA
+
+print(classification_report(y_test, y_pred))
+
+pca = PCA(n_components=2)
+X_pca = pca.fit_transform(X_scaled)
+
+sns.scatterplot(x=X_pca[:,0], y=X_pca[:,1], hue=y)
+plt.show()
+
+cm = confusion_matrix(y_test, y_pred)
+sns.heatmap(cm, annot=True, fmt='d')
+plt.show()
+\end{lstlisting}
+
+\section{Οπτικοποιήσεις Αποτελεσμάτων}
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=0.7\textwidth]{pca_scatter.png}
+  \caption{Οπτικοποίηση PCA για το dataset}
+\end{figure}
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=0.7\textwidth]{confusion_matrix.png}
+  \caption{Confusion matrix από το μοντέλο}
+\end{figure}
+
+\section{Dockerization της Εφαρμογής}
+
+Η εφαρμογή τρέχει μέσα σε Docker container για να εξασφαλίσει φορητότητα και ανεξαρτησία από το περιβάλλον.  
+
+\subsection{Dockerfile}
+
+\begin{lstlisting}[language=bash]
+FROM python:3.10
+
+WORKDIR /app
+COPY . /app
+
+RUN pip install --no-cache-dir -r requirements.txt
+
+EXPOSE 8501
+
+CMD ["streamlit", "run", "app.py", "--server.port=8501", "--server.address=0.0.0.0"]
+\end{lstlisting}
+
+\subsection{Οδηγίες Εκτέλεσης Docker}
+
+\begin{itemize}
+  \item Δημιουργία image: \texttt{docker build -t bioml-app .}
+  \item Εκτέλεση container: \texttt{docker run -p 8501:8501 bioml-app}
+\end{itemize}
+
+\section{Συμπεράσματα}
+
+Η ανάπτυξη της εφαρμογής κατέδειξε την αποτελεσματικότητα του Streamlit ως εργαλείου για γρήγορη και φιλική προς το χρήστη παρουσίαση εργαλείων μηχανικής μάθησης. Η χρήση Docker διασφαλίζει ότι η εφαρμογή μπορεί να τρέξει οπουδήποτε χωρίς πρόβλημα ρυθμίσεων. Μελλοντικές βελτιώσεις μπορούν να περιλαμβάνουν υποστήριξη περισσότερων αλγορίθμων και μεγαλύτερη παραμετροποίηση.
+
+\vspace{1cm}
+
+\noindent
+\textbf{Ομάδα:}  
+Ιωάννης Νταιλάκης – ML Υλοποίηση  \\
+Ιωάννης Μάζης – Streamlit και Docker  \\ 
+Στάυρος Ρουμελιώτης – Report και UML Διαγράμματα
+
+\end{document}

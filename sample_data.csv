@@ -1,0 +1,5 @@
+gene1,gene2,gene3,label
+2.1,3.2,1.1,cancer
+2.0,2.9,1.0,cancer
+1.1,0.9,3.0,normal
+0.9,1.1,3.2,normal
