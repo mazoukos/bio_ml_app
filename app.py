@@ -40,7 +40,7 @@ with tab1:
         df = None
 
     if df is not None:
-        st.header("⚙ Προεπεξεργασία")
+        st.header(" Προεπεξεργασία")
         X = df.iloc[:, :-1]
         y = df.iloc[:, -1]
 
