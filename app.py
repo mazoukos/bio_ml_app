@@ -16,19 +16,19 @@ from sklearn.datasets import load_breast_cancer
 
 st.set_page_config(page_title="BioML App", layout="wide")
 
-st.title("🔬 Εφαρμογή Ανάλυσης Μοριακής Βιολογίας με Machine Learning")
+st.title(" Εφαρμογή Ανάλυσης Μοριακής Βιολογίας με Machine Learning")
 
 tab1, tab2, tab3 = st.tabs(["Ανάλυση", "Οπτικοποιήσεις", "Πληροφορίες Ομάδας"])
 
 with tab1:
-    st.header("📁 Φόρτωση Δεδομένων")
+    st.header(" Φόρτωση Δεδομένων")
     uploaded_file = st.file_uploader("Εισάγετε dataset (.csv)", type="csv")
     
     use_example = st.checkbox("Χρήση Παραδείγματος Δεδομένων (Breast Cancer)")
 
     if uploaded_file is not None:
         df = pd.read_csv(uploaded_file)
-        st.write("🔍 Προεπισκόπηση:")
+        st.write(" Προεπισκόπηση:")
         st.dataframe(df.head())
     elif use_example:
         data = load_breast_cancer(as_frame=True)
@@ -40,7 +40,7 @@ with tab1:
         df = None
 
     if df is not None:
-        st.header("⚙️ Προεπεξεργασία")
+        st.header("⚙ Προεπεξεργασία")
         X = df.iloc[:, :-1]
         y = df.iloc[:, -1]
 
@@ -49,7 +49,7 @@ with tab1:
 
         st.success("Κανονικοποίηση Ολοκληρώθηκε")
 
-        st.header("🧠 Μοντέλο Μηχανικής Μάθησης")
+        st.header(" Μοντέλο Μηχανικής Μάθησης")
         test_size = st.slider("Test size", 0.1, 0.5, 0.2)
         X_train, X_test, y_train, y_test = train_test_split(X_scaled, y, test_size=test_size, random_state=42)
 
@@ -76,7 +76,7 @@ with tab1:
         st.session_state["model_option"] = model_option
 
 with tab2:
-    st.header("📊 Οπτικοποιήσεις")
+    st.header(" Οπτικοποιήσεις")
     if "X_scaled" in st.session_state and "clf" in st.session_state:
         X_scaled = st.session_state["X_scaled"]
         y = st.session_state["y"]
@@ -146,7 +146,7 @@ with tab2:
         st.info("Πρέπει να φορτώσετε και να εκπαιδεύσετε το μοντέλο πρώτα στο tab 'Ανάλυση'.")
 
 with tab3:
-    st.header("👥 Πληροφορίες Ομάδας")
+    st.header(" Πληροφορίες Ομάδας")
     st.markdown("""
     **Ομάδα:**  
     - Ιωάννης Νταιλάκης – ML Υλοποίηση  
